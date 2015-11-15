@@ -54,6 +54,15 @@ public class Trabalho2ICS
 
       return temas[indice];
    }
+   
+   public void getNotas(Melodia melodia)
+   {
+       System.out.println("\n" + melodia.getNome());
+       for(int i=0; i < melodia.getNumeroDeNotas(); i++){
+           System.out.println("Nota: " + melodia.getNota(i).getNome() +
+           "  Oitava: " + melodia.getNota(i).getOitava());
+       }
+   }
 
    public Trabalho2ICS()
    { 
@@ -92,13 +101,13 @@ public class Trabalho2ICS
      instrumentoC.setGanho(103);
 
      
-     Melodia m1 = selecTema(3); //Melodia selecionada na interface
+     Melodia m1 = selecTema(4); //Melodia selecionada na interface
      m1.getAutor();     
      m1.setAndamento(1f);
      
      Melodia m2 = selecTema(3);
      
-     Melodia m3 = selecTema(3);
+     Melodia m3 = selecTema(2);
      
              
      v1.addMelodia(m1);
@@ -117,8 +126,12 @@ public class Trabalho2ICS
      p.ganho(1.6f);
      
      //Toca o instrumento selecionado 
-     playInst(3); //Substituir por resultado da combobox
-
+     playInst(2); //Substituir por resultado da combobox
+     
+     getNotas(m1);
+     getNotas(m2);
+     getNotas(m3);
+     
      try{ System.in.read();
           System.exit(0);
         }
