@@ -1,4 +1,5 @@
 import java.awt.BorderLayout;
+import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -6,7 +7,8 @@ import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
-import javax.swing.JTextField;
+import javax.swing.JScrollPane;
+import javax.swing.JTextArea;
 import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 
@@ -36,7 +38,8 @@ public class Trabalho2ICS extends JPanel implements ActionListener
    LoadPlayer thPlayer;
    Thread threadPlayer;
    JComboBox listaTema;
-   JTextField nota;
+   JTextArea nota;
+   JScrollPane sp;
    
    
    
@@ -59,13 +62,16 @@ public class Trabalho2ICS extends JPanel implements ActionListener
 	   
 	   public void getNotas(Melodia melodia)
 	   {
+		   String str = "";
+		   str += "\n" + melodia.getNome()+"\n";
 	       System.out.println("\n" + melodia.getNome());
 	       for(int i=0; i < melodia.getNumeroDeNotas(); i++){
-	    	   nota.setText("Nota: " + melodia.getNota(i).getNome() +
-	           "  Oitava: " + melodia.getNota(i).getOitava());
+	    	   str += "Nota: " + melodia.getNota(i).getNome() +
+	    	           "  Oitava: " + melodia.getNota(i).getOitava() + "\n";
 	           //System.out.println("Nota: " + melodia.getNota(i).getNome() +
 	           //"  Oitava: " + melodia.getNota(i).getOitava());
 	       }
+	       nota.setText(str);
 	   }
 	   
 	   public void playInst(int index)
@@ -192,10 +198,13 @@ public class Trabalho2ICS extends JPanel implements ActionListener
 
 	 listaTema = new JComboBox(temas);
 	 
-	 nota = new JTextField();
+	 nota = new JTextArea(5,30);
 	 nota.setText("Nota: Oitava:");
      nota.setEditable(false);
-     nota.setColumns(10);
+     
+     sp = new JScrollPane (nota);
+     sp.setPreferredSize(new Dimension(350, 110));
+     sp.setVisible(true);
      
 	 botaoA = new JButton("Intrumento A");
 	 botaoB = new JButton("Intrumento B");
@@ -212,8 +221,7 @@ public class Trabalho2ICS extends JPanel implements ActionListener
 	 JPanel botaoPainel = new JPanel();
 	 
 	 temasPainel.add(listaTema);
-	 
-	 mostraNota.add(nota);
+	 mostraNota.add(sp);
 	 
 	 botaoPainel.add(botaoA);
 	 botaoPainel.add(botaoB);
