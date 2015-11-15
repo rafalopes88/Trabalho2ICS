@@ -1,7 +1,24 @@
-package trabalho2ics;
-import sintese.*;
+import java.awt.BorderLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
-public class Trabalho2ICS
+import javax.swing.JButton;
+import javax.swing.JComboBox;
+import javax.swing.JFrame;
+import javax.swing.JPanel;
+import javax.swing.JTextField;
+import javax.swing.SwingUtilities;
+import javax.swing.UIManager;
+
+import sintese.Curva;
+import sintese.Envoltoria;
+import sintese.Melodia;
+import sintese.Polifonia;
+import sintese.Som;
+import sintese.Tema;
+import sintese.Voz;
+
+public class Trabalho2ICS extends JPanel implements ActionListener
 {  
    InstrumentoA instrumentoA;
    InstrumentoB instrumentoB;
@@ -13,135 +30,232 @@ public class Trabalho2ICS
    Voz          v2;
    Voz          v3;
    Polifonia    p;
+   JButton botaoA, botaoB, botaoC, botaoT;
+   private static JFrame janela;
+   private int indexInstrumentos, indexTema;
+   LoadPlayer thPlayer;
+   Thread threadPlayer;
+   JComboBox listaTema;
+   JTextField nota;
    
    
    
    //Seleciona qual instrumento tocar a partir de um indice
-   public void playInst(int index)
-   {
-       if(index == 0)
-       {
-           Som som = v1.getSom();
-           som.setNome("voz 1");
-           som.visualiza();
-       }
-       else if (index == 1)
-       {
-           Som som = v2.getSom();
-           som.setNome("voz 2");
-           som.visualiza();
-       }
-       else if (index == 2){
-           Som som = v3.getSom();
-           som.setNome("voz 3");
-           som.visualiza();
-       }
-       else if(index == 3)
-       {
-            Som som = p.getSom();
-           som.setNome("polifonia");
-           som.visualiza();
-           
-       }
+
+   private static void createAndShowGUI() {
+       
+       janela = new JFrame("Tocador de mid");
+       janela.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+
+       
+       janela.add(new Trabalho2ICS());
+
+       
+       janela.pack();
+       janela.setVisible(true);
    }
 
-   public Melodia selecTema(int indice)
-   {
-      Melodia[] temas = {Tema.melodiasexta1(), Tema.sonata_scarlatti(), Tema.tema_aa_drawing_quintet_flauta(),
-      Tema.tema_aa_fuga1(), Tema.tema_bwv775_invencao14_direita(), Tema.tema_bwv775_invencao4_direita(),
-      Tema.tema_bwv775_invencao4_esquerda(), Tema.tema_bwv988goldberg_v03_eq(), Tema.tema_duda_no_frevo_eq(),
-      Tema.tema_duda_no_frevo_eqYYY()};
-
-      return temas[indice];
-   }
-   
-   public void getNotas(Melodia melodia)
-   {
-       System.out.println("\n" + melodia.getNome());
-       for(int i=0; i < melodia.getNumeroDeNotas(); i++){
-           System.out.println("Nota: " + melodia.getNota(i).getNome() +
-           "  Oitava: " + melodia.getNota(i).getOitava());
-       }
+   public class LoadPlayer implements Runnable{
+	   
+	   public void getNotas(Melodia melodia)
+	   {
+	       System.out.println("\n" + melodia.getNome());
+	       for(int i=0; i < melodia.getNumeroDeNotas(); i++){
+	    	   nota.setText("Nota: " + melodia.getNota(i).getNome() +
+	           "  Oitava: " + melodia.getNota(i).getOitava());
+	           //System.out.println("Nota: " + melodia.getNota(i).getNome() +
+	           //"  Oitava: " + melodia.getNota(i).getOitava());
+	       }
+	   }
+	   
+	   public void playInst(int index)
+	   {
+	       if(index == 0)
+	       {
+	           Som som = v1.getSom();
+	           som.setNome("voz 1");
+	           som.visualiza();
+	       }
+	       else if (index == 1)
+	       {
+	           Som som = v2.getSom();
+	           som.setNome("voz 2");
+	           som.visualiza();
+	       }
+	       else if (index == 2){
+	           Som som = v3.getSom();
+	           som.setNome("voz 3");
+	           som.visualiza();
+	       }
+	       else if(index == 3)
+	       {
+	            Som som = p.getSom();
+	           som.setNome("polifonia");
+	           som.visualiza();
+	           
+	       }
+	   }
+	   
+	   public Melodia selecTema(int indice)
+	   {
+	      Melodia[] temas = {Tema.melodiasexta1(), Tema.sonata_scarlatti(), Tema.tema_aa_drawing_quintet_flauta(),
+	      Tema.tema_aa_fuga1(), Tema.tema_bwv775_invencao14_direita(), Tema.tema_bwv775_invencao4_direita(),
+	      Tema.tema_bwv775_invencao4_esquerda(), Tema.tema_bwv988goldberg_v03_eq(), Tema.tema_duda_no_frevo_eq(),
+	      Tema.tema_duda_no_frevo_eqYYY()};
+	
+	      return temas[indice];
+	   }
+	   
+	   public void run(){
+		   
+		 instrumentoA = new InstrumentoA(0.1f);
+		 instrumentoB  = new InstrumentoB(0.1f);
+		 instrumentoC = new InstrumentoC(0.1f);
+		
+		 env   = new Envoltoria();
+		 curva = new Curva(720);
+		 curva.addPonto(  0f,   0f);
+		 curva.addPonto( 30f, 400f);
+		 curva.addPonto(240f, 300f);
+		 curva.addPonto(720f,   0f);
+		   
+		 env.setCURVA(curva);
+		
+		 v1 = new Voz(instrumentoA);
+		 v2 = new Voz(instrumentoB);
+	 	 v3 =  new Voz(instrumentoC);
+		
+		 
+		       
+		 instrumentoA.setEnvoltoria(env);
+		 instrumentoA.setLambda(0.5f);
+		 instrumentoA.setFase(0f);
+		 instrumentoA.setGanho(103);  
+		 
+		 instrumentoB.setEnvoltoria(env);
+		 instrumentoB.setLambda(0.5f);
+		 instrumentoB.setFase(0f);
+		 instrumentoB.setGanho(103);
+		 
+		 instrumentoC.setEnvoltoria(env);
+		 instrumentoC.setLambda(0.5f);
+		 instrumentoC.setFase(0f);
+		 instrumentoC.setGanho(103);
+		
+		 
+		 Melodia m1 = selecTema(indexTema); //Melodia selecionada na interface
+		 m1.getAutor();     
+		 m1.setAndamento(1f);
+		 
+		 Melodia m2 = selecTema(indexTema);
+		 
+		 Melodia m3 = selecTema(indexTema);
+		 
+		         
+		 v1.addMelodia(m1);
+		 v2.addMelodia(m2);
+		 v3.addMelodia(m3);
+		
+		 v1.ganho(1);
+		 v2.ganho(1);
+		 v3.ganho(2);
+		 
+		 p = new Polifonia();
+		 p.addVoz(v1);
+		 p.addVoz(v2);
+		 p.addVoz(v3);
+		 
+		 p.ganho(1.6f);
+		 
+		 getNotas(m1);
+	     getNotas(m2);
+	     getNotas(m3);
+		 
+		 //Toca o instrumento selecionado 
+		 playInst(indexInstrumentos); //Substituir por resultado da combobox
+		
+		 try{ System.in.read();
+		      System.exit(0);
+		 }
+		 catch(Exception e){};   
+	  }
    }
 
    public Trabalho2ICS()
    { 
-     instrumentoA = new InstrumentoA(0.1f);
-     instrumentoB  = new InstrumentoB(0.1f);
-     instrumentoC = new InstrumentoC(0.1f);
+	 super(new BorderLayout());
+	 
+	 Melodia[] temas = {Tema.melodiasexta1(), Tema.sonata_scarlatti(), Tema.tema_aa_drawing_quintet_flauta(),
+		      Tema.tema_aa_fuga1(), Tema.tema_bwv775_invencao14_direita(), Tema.tema_bwv775_invencao4_direita(),
+		      Tema.tema_bwv775_invencao4_esquerda(), Tema.tema_bwv988goldberg_v03_eq(), Tema.tema_duda_no_frevo_eq(),
+		      Tema.tema_duda_no_frevo_eqYYY()};
 
-     env   = new Envoltoria();
-     curva = new Curva(720);
-     curva.addPonto(  0f,   0f);
-     curva.addPonto( 30f, 400f);
-     curva.addPonto(240f, 300f);
-     curva.addPonto(720f,   0f);
-       
-    env.setCURVA(curva);
-
-    v1 = new Voz(instrumentoA);
-    v2 = new Voz(instrumentoB);
-    v3 =  new Voz(instrumentoC);
-
+	 listaTema = new JComboBox(temas);
+	 
+	 nota = new JTextField();
+	 nota.setText("Nota: Oitava:");
+     nota.setEditable(false);
+     nota.setColumns(10);
      
-           
-     instrumentoA.setEnvoltoria(env);
-     instrumentoA.setLambda(0.5f);
-     instrumentoA.setFase(0f);
-     instrumentoA.setGanho(103);  
-     
-     instrumentoB.setEnvoltoria(env);
-     instrumentoB.setLambda(0.5f);
-     instrumentoB.setFase(0f);
-     instrumentoB.setGanho(103);
-     
-     instrumentoC.setEnvoltoria(env);
-     instrumentoC.setLambda(0.5f);
-     instrumentoC.setFase(0f);
-     instrumentoC.setGanho(103);
-
-     
-     Melodia m1 = selecTema(4); //Melodia selecionada na interface
-     m1.getAutor();     
-     m1.setAndamento(1f);
-     
-     Melodia m2 = selecTema(3);
-     
-     Melodia m3 = selecTema(2);
-     
-             
-     v1.addMelodia(m1);
-     v2.addMelodia(m2);
-     v3.addMelodia(m3);
-
-     v1.ganho(1);
-     v2.ganho(1);
-     v3.ganho(2);
-     
-     p = new Polifonia();
-     p.addVoz(v1);
-     p.addVoz(v2);
-     p.addVoz(v3);
-     
-     p.ganho(1.6f);
-     
-     //Toca o instrumento selecionado 
-     playInst(2); //Substituir por resultado da combobox
-     
-     getNotas(m1);
-     getNotas(m2);
-     getNotas(m3);
-     
-     try{ System.in.read();
-          System.exit(0);
-        }
-     catch(Exception e){};          
-     
+	 botaoA = new JButton("Intrumento A");
+	 botaoB = new JButton("Intrumento B");
+	 botaoC = new JButton("Intrumento C");
+	 botaoT = new JButton("Polifonia");
+	 
+	 botaoA.addActionListener(this);
+	 botaoB.addActionListener(this);
+	 botaoC.addActionListener(this);
+	 botaoT.addActionListener(this);
+	 
+	 JPanel temasPainel = new JPanel();
+	 JPanel mostraNota = new JPanel();
+	 JPanel botaoPainel = new JPanel();
+	 
+	 temasPainel.add(listaTema);
+	 
+	 mostraNota.add(nota);
+	 
+	 botaoPainel.add(botaoA);
+	 botaoPainel.add(botaoB);
+	 botaoPainel.add(botaoC);
+	 botaoPainel.add(botaoT);
+	 
+	 add(temasPainel, BorderLayout.PAGE_START);
+	 add(mostraNota, BorderLayout.CENTER);
+	 add(botaoPainel, BorderLayout.PAGE_END);
+	 thPlayer = new LoadPlayer();
    }      
       
    public static void main(String args[])
    { 
-       new Trabalho2ICS();
-   }   
+	   SwingUtilities.invokeLater(new Runnable() {
+	       public void run() {
+	           UIManager.put("swing.boldMetal", Boolean.FALSE);
+	           createAndShowGUI();
+	       }
+		 });
+   }
+
+	@Override
+	public void actionPerformed(ActionEvent e) {
+		if (e.getSource() == botaoA) {
+            indexInstrumentos = 0;
+        }
+		else if (e.getSource() == botaoB) {
+			indexInstrumentos = 1;
+        }
+		else if (e.getSource() == botaoC) {
+			indexInstrumentos = 2;
+        }
+		else if (e.getSource() == botaoT) {
+			indexInstrumentos = 3;
+        }
+		indexTema = listaTema.getSelectedIndex();
+		threadPlayer = new Thread(thPlayer);
+		threadPlayer.start();
+	
+		
+		
+	}  
 
 }

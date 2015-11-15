@@ -1,5 +1,3 @@
-    
-package trabalho2ics;
 import sintese.*;
 
 
@@ -36,7 +34,7 @@ public class InstrumentoC extends Dispositivo
         this.envAMPLITUDE    = env_;
         this.oscSENOIDAL1    = osc_;
         
-
+        
         
         this.oscSENOIDAL2 = new Oscilador();
         this.somaRUIDOSC = new Somador(oscSENOIDAL1,geradorRUIDO);
@@ -102,6 +100,8 @@ public class InstrumentoC extends Dispositivo
         oscSENOIDAL2.reset(); 
         
     }
+
+
 
     public void setGanho(float g)
     {this.ganho = g;

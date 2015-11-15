@@ -1,6 +1,9 @@
-    
-package trabalho2ics;
-import sintese.*;
+import javax.swing.JButton;
+
+import sintese.Dispositivo;
+import sintese.Envoltoria;
+import sintese.Oscilador;
+import sintese.Ruido;
 
 
 public class InstrumentoA extends Dispositivo
@@ -16,7 +19,6 @@ public class InstrumentoA extends Dispositivo
     private Oscilador  oscSENOIDAL;    //--unidade Senoidal
     
     private float fatorCorte;
-    
 
     
     public InstrumentoA(float fc)
