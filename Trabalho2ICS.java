@@ -1,3 +1,5 @@
+package trabalho2ics;
+
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
@@ -178,7 +180,7 @@ public class Trabalho2ICS extends JPanel implements ActionListener
 	     getNotas(m3);
 		 
 		 //Toca o instrumento selecionado 
-		 playInst(indexInstrumentos); //Substituir por resultado da combobox
+		 playInst(indexInstrumentos); 
 		
 		 try{ System.in.read();
 		      System.exit(0);
@@ -191,12 +193,13 @@ public class Trabalho2ICS extends JPanel implements ActionListener
    { 
 	 super(new BorderLayout());
 	 
-	 Melodia[] temas = {Tema.melodiasexta1(), Tema.sonata_scarlatti(), Tema.tema_aa_drawing_quintet_flauta(),
-		      Tema.tema_aa_fuga1(), Tema.tema_bwv775_invencao14_direita(), Tema.tema_bwv775_invencao4_direita(),
-		      Tema.tema_bwv775_invencao4_esquerda(), Tema.tema_bwv988goldberg_v03_eq(), Tema.tema_duda_no_frevo_eq(),
-		      Tema.tema_duda_no_frevo_eqYYY()};
+         String[] nometema = {"Melodiasexta1", "Sonata_scarlatti", "Tema_aa_drawing_quintet_flauta",
+           "Tema_aa_fuga1", "Tema_bwv775_invencao14_direita", "Tema_bwv775_invencao4_direita",
+           "Tema_bwv775_invencao4_esquerda", "Tema_bwv988goldberg_v03_eq", "Tema_duda_no_frevo_eq",
+           "Tema_duda_no_frevo_eqYYY"};
 
-	 listaTema = new JComboBox(temas);
+        listaTema = new JComboBox(nometema);
+
 	 
 	 nota = new JTextArea(5,30);
 	 nota.setText("Nota: Oitava:");

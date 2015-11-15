@@ -1,3 +1,4 @@
+package trabalho2ics;
 import sintese.*;
 
 
